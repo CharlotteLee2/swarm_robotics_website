@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="R2P2: decentralized role-based proportional control for multi-robot box transport over flat, uphill and downhill surfaces.">
+  <meta property="og:title" content="Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control"/>
+  <meta property="og:description" content="R2P2: Roles with Rules and Proportional-control Primitive for collaborative box pushing with teams of wheeled robots."/>
+  <meta name="keywords" content="multi-robot, swarm robotics, box transport, collaborative pushing, decentralized control, task and motion planning, R2P2, IsaacSim, PyBullet, TurtleBot">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">Aditya Bhatt,</span>
+              <span class="author-block">Himavarshini Yarragangu<sup>*</sup>,</span>
+              <span class="author-block">Urvish Shah<sup>*</sup>,</span>
+              <span class="author-block">Venkata Sai Yaswanth Mohan Thota<sup>*</sup>,</span>
+              <span class="author-block">Souma Chowdhury<sup>&dagger;</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">University at Buffalo<br>IDETC-CIE 2026</span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Equal Contribution &nbsp; <sup>&dagger;</sup>Corresponding Author</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Arxiv PDF link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2605.26430" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2605.26430" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/adamslab-ub/Collaborative-MultiRobot-Object-Transport" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- Hardware video link -->
+                <span class="link-block">
+                  <a href="https://buffalo.box.com/s/rpvqph1nke4vfqp3cxslnoytzm74zjbp" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-video"></i>
+                    </span>
+                    <span>Hardware Video</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- First Figure -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- replace with <img src="static/images/first_figure.png" alt="Collaborative box transport in IsaacSim"/> -->
+      <div class="img-placeholder is-wide">Figure 1: Collaborative box transport in IsaacSim</div>
+      <h2 class="subtitle has-text-centered">
+        <b>Collaborative box transport</b> using a team of TurtleBots in NVIDIA IsaacSim.
+        The goal is to transport the box <b>downhill</b> to the goal location through the waypoints (shown as spheres),
+        on a plane at a <b>5&deg; incline</b>. The goal location is the wooden plank shown down the plane.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End First Figure -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Collaborative transport of objects via pushing by multiple robots has many applications,
+            ranging from construction and warehouse environments to post disaster debris clean-up.
+            Achieving collaborative transport over surfaces with different inclination and friction
+            properties however poses unique challenges. To address these challenges, this paper presents
+            an asynchronous decentralized task and motion planning approach for transporting rectangular
+            boxes of varying mass over flat, uphill and downhill terrain. Such a decentralized approach
+            alleviates communication, synchronization and consensus needs and mitigates single point of
+            failure issues. Our approach, called R2P2 or Roles with Rules and Proportional-control
+            Primitive, assigns roles (e.g., push, support and prevent) to robots based on rules cognizant
+            of the mode of manipulation needed (box rotation vs translation); this is followed by either
+            rule-based control or proportional control of robot velocity based on the roles. Each robot
+            is assumed to observe the location and heading of self and the box in executing the role and
+            controls. R2P2 is evaluated with a six-robot team deployed in a simulator built using NVIDIA
+            IsaacSim &ndash; demonstrating generalizability across different surface friction/inclination
+            and box mass scenarios, and better success rate compared to a standard virtual-leader-follower
+            method. R2P2 is also successfully validated with a physical experiment, where it is executed
+            onboard four turtlebots tasked with moving a 1.2 kg box.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Framework -->
+<section class="framework">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <h2 class="title is-3 has-text-centered">R2P2 Framework</h2>
+      <!-- replace with <img src="static/images/framework.png" alt="Flowchart of R2P2" style="width: 100%; height: auto;"> -->
+      <div class="img-placeholder">Figure 3: Flowchart of R2P2</div>
+      <h2 class="subtitle has-text-centered">
+        R2P2 decomposes the mission into two primitives: <b>box rotation</b> and <b>box translation</b>.
+        At each timestep, every robot independently decides the box primitive (turn-anticlockwise, turn-clockwise or straight-motion),
+        self-assigns a role (<b>Push</b>, <b>Prevent</b> or <b>Support</b>) from its position relative to the box,
+        and computes its velocity with either rule-based control or <b>proportional control</b>.
+        A repositioning maneuver returns robots to their assigned positions whenever they drift.
+      </h2>
+      <!-- replace with <img src="static/images/roles.png" alt="Box primitives and roles" style="width: 100%; height: auto;"> -->
+      <div class="img-placeholder">Figure 4: Box primitives and roles for three target waypoints</div>
+      <h2 class="subtitle has-text-centered">
+        Box primitive and role assignment for different target waypoints.
+        For waypoint A the box turns anticlockwise: robots 1 and 4 push, 2 and 5 prevent, and 3 and 6 support.
+        For waypoint B the box moves straight: robots 4 and 5 push, 1 and 2 prevent, and 3 and 6 support.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End Framework -->
+
+<!-- Simulation Videos -->
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full-width is-centered has-text-centered">
+        <h2 class="title is-3" style="text-align: center;">
+        Mission Circle Slope Compact Uphill
+        </h2>
+        <video controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/mission_circle_slope_compact_uphill.mp4" poster="" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+
+      <div class="column is-full-width is-centered has-text-centered">
+        <h2 class="title is-3" style="text-align: center;">
+        Phys Rect Slope A* Annotated
+        </h2>
+        <video controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/phys_rect_slope_astar_annotated_v4.mp4" poster="" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Simulation Videos -->
+
+<!-- Varying Terrains -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Transport over Varying Terrains</h2>
+    <!-- replace with <img src="static/images/terrains.png" alt="R2P2 over various terrains in IsaacSim" style="width: 100%; height: auto;"> -->
+    <div class="img-placeholder is-wide">Figure 6: R2P2 over flat, downhill and uphill terrain</div>
+    <h2 class="subtitle has-text-centered">
+      Demonstration of R2P2 over <b>flat</b>, <b>downhill</b> and <b>uphill</b> terrain (5&deg; incline) in IsaacSim with a 2 kg box.
+      Top: environment setup. Bottom: resulting box trajectories versus the reference path, with robot roles over the mission.
+      The same heuristic parameters are used in every scenario. Mission times are 337 s (flat), 385 s (downhill) and 840 s (uphill).
+    </h2>
+  </div>
+</section>
+<!-- End Varying Terrains -->
+
+<!-- Generalizability -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Generalizability</h2>
+    <div class="table-container">
+      <table class="table is-bordered is-striped is-narrow is-hoverable results-table">
+        <thead>
+          <tr>
+            <th rowspan="2">Terrain Type</th>
+            <th rowspan="2">Mass (kg)</th>
+            <th colspan="3">Mission Time (s)</th>
+          </tr>
+          <tr>
+            <th>&mu; = 0.001</th>
+            <th>&mu; = 0.01</th>
+            <th>&mu; = 0.1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th rowspan="3">Flat</th><td>0.5</td><td>77.70</td><td>76.02</td><td>69.91</td></tr>
+          <tr><td>2.0</td><td>85.34</td><td>82.89</td><td>93.64</td></tr>
+          <tr><td>6.0</td><td>116.49</td><td>125.58</td><td>179.20</td></tr>
+          <tr><th rowspan="3">Downhill</th><td>0.5</td><td>78.49</td><td>62.35</td><td>72.13</td></tr>
+          <tr><td>2.0</td><td>72.34</td><td>77.94</td><td>71.53</td></tr>
+          <tr><td>6.0</td><td>79.97</td><td>79.53</td><td>74.33</td></tr>
+          <tr><th rowspan="3">Uphill</th><td>0.5</td><td>244.38</td><td>232.81</td><td>267.83</td></tr>
+          <tr><td>2.0</td><td>266.44</td><td>233.26</td><td>268.18</td></tr>
+          <tr><td>6.0</td><td>292.96</td><td>299.59</td><td>323.27</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      Mission time across terrain type, surface friction coefficient (&mu;) and box mass. Uphill and downhill terrains have a 5&deg; incline.
+      R2P2 achieves <b>successful transport in every case</b>. Mission time grows with box mass on flat and uphill surfaces.
+    </h2>
+  </div>
+</section>
+<!-- End Generalizability -->
+
+<!-- Comparison -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Comparison with Baseline</h2>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-hoverable results-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Case (bearing)</th>
+                <th colspan="2">Uphill</th>
+                <th colspan="2">Downhill</th>
+                <th colspan="2">Flat</th>
+              </tr>
+              <tr><th>VLF</th><th>R2P2</th><th>VLF</th><th>R2P2</th><th>VLF</th><th>R2P2</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1 (15&deg;)</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>2 (30&deg;)</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>3 (45&deg;)</td><td>F</td><td>S</td><td>F</td><td>S</td><td>F</td><td>S</td></tr>
+              <tr><td>4 (60&deg;)</td><td>F</td><td>S</td><td>F</td><td>S</td><td>F</td><td>S</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="has-text-centered">(a) VLF baseline vs. R2P2, 20 cm goal tolerance</p>
+      </div>
+      <div class="column">
+        <div class="table-container">
+          <table class="table is-bordered is-narrow is-hoverable results-table">
+            <thead>
+              <tr><th>Case (bearing)</th><th>Uphill</th><th>Downhill</th><th>Flat</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1 (15&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>2 (30&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>3 (45&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>4 (60&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
+              <tr><td>5 (75&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="has-text-centered">(b) R2P2, tighter 10 cm goal tolerance</p>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      Success (S) or failure (F) over different goal bearings and terrains.
+      The <b>Virtual Leader Follower (VLF)</b> baseline only succeeds for small bearings, losing the box or colliding beyond that,
+      while <b>R2P2 succeeds in every case</b>. On flat terrain, six robots with R2P2 can move a box of up to <b>15 kg</b>, versus only 0.05 kg with VLF.
+    </h2>
+  </div>
+</section>
+<!-- End Comparison -->
+
+<!-- Sensitivity Analysis -->
+<section class="section">
+  <div class="container">
+    <h2 class="title is-3 has-text-centered">Sensitivity Analysis</h2>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img src="static/images/heuristic_effects.png" alt="Main effects of heuristic control parameters"> -->
+        <div class="img-placeholder">Figure 8: Main effects of heuristic control parameters</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <img src="static/images/environment_effects.png" alt="Main effects of environment factors"> -->
+        <div class="img-placeholder">Figure 9: Main effects of environment factors</div>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <h2 class="subtitle has-text-centered">
+        Taguchi L9&times;L9 crossed-array study (81 PyBullet runs per terrain) of the effect of R2P2 heuristics and environment factors on task completion time.
+        <b>Contact placement</b> is the dominant heuristic on every terrain, producing a 9&times; performance difference on flat terrain,
+        3.7&times; uphill and 2.2&times; downhill. The best heuristic configuration also differs between terrains.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End Sensitivity Analysis -->
+
+<!-- Physical Experiment -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Physical Experiment</h2>
+    <!-- replace with <img src="static/images/physical_experiment.png" alt="Physical and simulation experiment with R2P2" style="width: 100%; height: auto;"> -->
+    <div class="img-placeholder is-wide">Figure 10: Physical and simulation experiment with R2P2</div>
+    <h2 class="subtitle has-text-centered">
+      Four <b>TurtleBot3 Burger</b> robots transport a 1.2 kg cardboard box over flat terrain, each running R2P2 <b>onboard</b> (Raspberry Pi 4, ROS2) using motion-capture state.
+      Top: box trajectories in the physical experiment and in simulation. Bottom: snapshots from hardware and from the simulator.
+      With identical heuristics, the trajectories closely match. The hardware mission takes about 25 minutes versus about 3 minutes in simulation.
+    </h2>
+  </div>
+</section>
+<!-- End Physical Experiment -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </body>
+  </html>
