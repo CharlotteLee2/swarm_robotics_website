@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="R2P2: decentralized role-based proportional control for multi-robot box transport over flat, uphill and downhill surfaces.">
-  <meta property="og:title" content="Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control"/>
-  <meta property="og:description" content="R2P2: Roles with Rules and Proportional-control Primitive for collaborative box pushing with teams of wheeled robots."/>
-  <meta name="keywords" content="multi-robot, swarm robotics, box transport, collaborative pushing, decentralized control, task and motion planning, R2P2, IsaacSim, PyBullet, TurtleBot">
+  <meta name="description" content="R2P2: decentralized role-based collaborative push transport of rectangular, L-shaped and circular objects by teams of 4 to 15 robots over flat and inclined terrain.">
+  <meta property="og:title" content="Decentralized Role-Based Collaborative Object Transport Across Object Shapes, Team Sizes, and Terrains"/>
+  <meta property="og:description" content="R2P2 extends role-based multi-robot pushing to new object shapes, any team size, cluttered scenes, narrow doorways, robot failures and inclined terrain, validated in PyBullet and on TurtleBot hardware."/>
+  <meta name="keywords" content="multi-robot systems, cooperative manipulation, non-prehensile manipulation, decentralized control, collaborative transport, R2P2, A*, fault tolerance, PyBullet, TurtleBot">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control</title>
+  <title>Decentralized Role-Based Collaborative Object Transport Across Object Shapes, Team Sizes, and Terrains</title>
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
 
@@ -28,32 +28,58 @@
 </head>
 <body>
 
+<!-- Sticky section navigation -->
+<nav class="navbar is-fixed-top site-nav" role="navigation" aria-label="section navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item nav-brand" href="#top">R2P2</a>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="sectionNav">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div id="sectionNav" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item nav-link" href="#overview">Overview</a>
+      <a class="navbar-item nav-link" href="#method">Method</a>
+      <a class="navbar-item nav-link" href="#scalability">Scalability</a>
+      <a class="navbar-item nav-link" href="#malfunction">Malfunction</a>
+      <a class="navbar-item nav-link" href="#noise">Noise</a>
+      <a class="navbar-item nav-link" href="#baseline">Baseline</a>
+      <a class="navbar-item nav-link" href="#ablations">Ablations</a>
+      <a class="navbar-item nav-link" href="#hardware">Hardware</a>
+      <a class="navbar-item nav-link" href="#appendix">Appendix</a>
+    </div>
+  </div>
+</nav>
+<!-- End sticky section navigation -->
 
-  <section class="hero">
+  <section class="hero" id="top">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Multi-Robot Box Transport over Different Surfaces with Decentralized Role-based Proportional Control</h1>
+            <h1 class="title is-1 publication-title">Decentralized Role-Based Collaborative Object Transport Across Object Shapes, Team Sizes, and Terrains</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
+              <span class="author-block">Suman Gowda,</span>
               <span class="author-block">Aditya Bhatt,</span>
-              <span class="author-block">Himavarshini Yarragangu<sup>*</sup>,</span>
-              <span class="author-block">Urvish Shah<sup>*</sup>,</span>
-              <span class="author-block">Venkata Sai Yaswanth Mohan Thota<sup>*</sup>,</span>
+              <span class="author-block">Soham Mehra<sup>*</sup>,</span>
+              <span class="author-block">Awais Ahmad<sup>*</sup>,</span>
+              <span class="author-block">Charlotte Lee<sup>*</sup>,</span>
               <span class="author-block">Souma Chowdhury<sup>&dagger;</sup></span>
             </div>
 
             <div class="is-size-5 publication-authors">
-              <span class="author-block">University at Buffalo<br>IDETC-CIE 2026</span>
+              <span class="author-block">University at Buffalo<br>Journal of Mechanisms and Robotics (under review)</span>
               <span class="eql-cntrb"><small><br><sup>*</sup>Equal Contribution &nbsp; <sup>&dagger;</sup>Corresponding Author</small></span>
             </div>
 
             <div class="column has-text-centered">
               <div class="publication-links">
-                <!-- Arxiv PDF link -->
+                <!-- Paper PDF link: TODO add JMR paper link -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/pdf/2605.26430" target="_blank"
+                  <a href="#" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -62,9 +88,9 @@
                   </a>
                 </span>
 
-                <!-- ArXiv abstract Link -->
+                <!-- ArXiv abstract link: TODO add JMR arXiv link -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2605.26430" target="_blank"
+                  <a href="#" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -102,250 +128,409 @@
     </div>
   </section>
 
-<!-- First Figure -->
-<section class="hero teaser">
+<!-- Overview -->
+<section class="hero teaser" id="overview">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!-- replace with <img src="static/images/first_figure.png" alt="Collaborative box transport in IsaacSim"/> -->
-      <div class="img-placeholder is-wide">Figure 1: Collaborative box transport in IsaacSim</div>
+      <!-- replace with <img class="paper-figure" src="static/images/teaser.png" alt="Collaborative push-only transport in hardware and simulation"> -->
+      <div class="img-placeholder is-wide">Figure 1: Snapshots of collaborative push-only transport in hardware and simulation</div>
       <h2 class="subtitle has-text-centered">
-        <b>Collaborative box transport</b> using a team of TurtleBots in NVIDIA IsaacSim.
-        The goal is to transport the box <b>downhill</b> to the goal location through the waypoints (shown as spheres),
-        on a plane at a <b>5&deg; incline</b>. The goal location is the wooden plank shown down the plane.
+        A team of mobile robots moves one rigid object across <b>flat</b> and <b>inclined</b> terrain using <b>only push contacts</b>:
+        no grippers and no rigid attachment.
       </h2>
-    </div>
-  </div>
-</section>
-<!-- End First Figure -->
-
-<!-- Paper abstract -->
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Collaborative transport of objects via pushing by multiple robots has many applications,
-            ranging from construction and warehouse environments to post disaster debris clean-up.
-            Achieving collaborative transport over surfaces with different inclination and friction
-            properties however poses unique challenges. To address these challenges, this paper presents
-            an asynchronous decentralized task and motion planning approach for transporting rectangular
-            boxes of varying mass over flat, uphill and downhill terrain. Such a decentralized approach
-            alleviates communication, synchronization and consensus needs and mitigates single point of
-            failure issues. Our approach, called R2P2 or Roles with Rules and Proportional-control
-            Primitive, assigns roles (e.g., push, support and prevent) to robots based on rules cognizant
-            of the mode of manipulation needed (box rotation vs translation); this is followed by either
-            rule-based control or proportional control of robot velocity based on the roles. Each robot
-            is assumed to observe the location and heading of self and the box in executing the role and
-            controls. R2P2 is evaluated with a six-robot team deployed in a simulator built using NVIDIA
-            IsaacSim &ndash; demonstrating generalizability across different surface friction/inclination
-            and box mass scenarios, and better success rate compared to a standard virtual-leader-follower
-            method. R2P2 is also successfully validated with a physical experiment, where it is executed
-            onboard four turtlebots tasked with moving a 1.2 kg box.
-          </p>
-        </div>
+      <div class="content">
+        <p>
+          <b>R2P2</b> (Roles with Rules and Proportional-control Primitive) is a decentralized, role-based framework for collaborative transport.
+          This work extends it into a shape- and terrain-aware pipeline:
+        </p>
+        <ul>
+          <li>A robot position-assignment scheme that works for <b>any team size</b> and extends R2P2 to <b>L-shaped</b> and <b>circular</b> objects.</li>
+          <li>An object-level <b>A* planner</b> for cluttered scenes and narrow doorways, a <b>transport-aware</b> variant whose edge costs are measured rotate&ndash;translate primitive times, and a mechanism that keeps the team working when a <b>peer robot fails</b>.</li>
+          <li>Simulation studies with teams of <b>4 to 15 robots</b>, including robustness to localization noise and robot failure.</li>
+          <li>Physical experiments with rectangular and circular objects on flat terrain and on a <b>6&deg; incline</b>, covering cluttered scenes, narrow doorways and obstacles on the slope.</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
-<!-- End paper abstract -->
+<!-- End Overview -->
 
-<!-- Framework -->
-<section class="framework">
+<!-- Method -->
+<section class="section framework" id="method">
   <div class="container is-max-desktop">
-    <div class="hero-body">
-      <h2 class="title is-3 has-text-centered">R2P2 Framework</h2>
-      <!-- replace with <img src="static/images/framework.png" alt="Flowchart of R2P2" style="width: 100%; height: auto;"> -->
-      <div class="img-placeholder">Figure 3: Flowchart of R2P2</div>
-      <h2 class="subtitle has-text-centered">
-        R2P2 decomposes the mission into two primitives: <b>box rotation</b> and <b>box translation</b>.
-        At each timestep, every robot independently decides the box primitive (turn-anticlockwise, turn-clockwise or straight-motion),
-        self-assigns a role (<b>Push</b>, <b>Prevent</b> or <b>Support</b>) from its position relative to the box,
-        and computes its velocity with either rule-based control or <b>proportional control</b>.
-        A repositioning maneuver returns robots to their assigned positions whenever they drift.
-      </h2>
-      <!-- replace with <img src="static/images/roles.png" alt="Box primitives and roles" style="width: 100%; height: auto;"> -->
-      <div class="img-placeholder">Figure 4: Box primitives and roles for three target waypoints</div>
-      <h2 class="subtitle has-text-centered">
-        Box primitive and role assignment for different target waypoints.
-        For waypoint A the box turns anticlockwise: robots 1 and 4 push, 2 and 5 prevent, and 3 and 6 support.
-        For waypoint B the box moves straight: robots 4 and 5 push, 1 and 2 prevent, and 3 and 6 support.
-      </h2>
-    </div>
-  </div>
-</section>
-<!-- End Framework -->
-
-<!-- Simulation Videos -->
-<section class="section">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-full-width is-centered has-text-centered">
-        <h2 class="title is-3" style="text-align: center;">
-        Mission Circle Slope Compact Uphill
-        </h2>
-        <video controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/mission_circle_slope_compact_uphill.mp4" poster="" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
-      </div>
-
-      <div class="column is-full-width is-centered has-text-centered">
-        <h2 class="title is-3" style="text-align: center;">
-        Phys Rect Slope A* Annotated
-        </h2>
-        <video controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/phys_rect_slope_astar_annotated_v4.mp4" poster="" style="border: 1px solid #bbb; border-radius: 10px; margin: 1.0%;"></video>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- End Simulation Videos -->
-
-<!-- Varying Terrains -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Transport over Varying Terrains</h2>
-    <!-- replace with <img src="static/images/terrains.png" alt="R2P2 over various terrains in IsaacSim" style="width: 100%; height: auto;"> -->
-    <div class="img-placeholder is-wide">Figure 6: R2P2 over flat, downhill and uphill terrain</div>
+    <h2 class="title is-3 has-text-centered">R2P2 Framework</h2>
+    <img class="paper-figure" src="static/images/framework.png" alt="R2P2 framework diagram">
     <h2 class="subtitle has-text-centered">
-      Demonstration of R2P2 over <b>flat</b>, <b>downhill</b> and <b>uphill</b> terrain (5&deg; incline) in IsaacSim with a 2 kg box.
-      Top: environment setup. Bottom: resulting box trajectories versus the reference path, with robot roles over the mission.
-      The same heuristic parameters are used in every scenario. Mission times are 337 s (flat), 385 s (downhill) and 840 s (uphill).
+      R2P2 runs in five stages: <b>(A)</b> A* object path planning, <b>(B)</b> rotate/translate transport primitives,
+      <b>(C)</b> geometry-based contact placement, <b>(D)</b> role assignment (<b>Push</b>, <b>Prevent</b>, <b>Support</b>), and
+      <b>(E)</b> per-role motion control, plus a fault monitor that detects failed peers and triggers replanning.
+      Every robot computes its own slot, role and command on board. Contact selection and role assignment need no peer-to-peer negotiation.
     </h2>
-  </div>
-</section>
-<!-- End Varying Terrains -->
 
-<!-- Generalizability -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Generalizability</h2>
-    <div class="table-container">
-      <table class="table is-bordered is-striped is-narrow is-hoverable results-table">
-        <thead>
-          <tr>
-            <th rowspan="2">Terrain Type</th>
-            <th rowspan="2">Mass (kg)</th>
-            <th colspan="3">Mission Time (s)</th>
-          </tr>
-          <tr>
-            <th>&mu; = 0.001</th>
-            <th>&mu; = 0.01</th>
-            <th>&mu; = 0.1</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><th rowspan="3">Flat</th><td>0.5</td><td>77.70</td><td>76.02</td><td>69.91</td></tr>
-          <tr><td>2.0</td><td>85.34</td><td>82.89</td><td>93.64</td></tr>
-          <tr><td>6.0</td><td>116.49</td><td>125.58</td><td>179.20</td></tr>
-          <tr><th rowspan="3">Downhill</th><td>0.5</td><td>78.49</td><td>62.35</td><td>72.13</td></tr>
-          <tr><td>2.0</td><td>72.34</td><td>77.94</td><td>71.53</td></tr>
-          <tr><td>6.0</td><td>79.97</td><td>79.53</td><td>74.33</td></tr>
-          <tr><th rowspan="3">Uphill</th><td>0.5</td><td>244.38</td><td>232.81</td><td>267.83</td></tr>
-          <tr><td>2.0</td><td>266.44</td><td>233.26</td><td>268.18</td></tr>
-          <tr><td>6.0</td><td>292.96</td><td>299.59</td><td>323.27</td></tr>
-        </tbody>
-      </table>
+    <div class="content has-text-justified">
+      <p>
+        <b>Roles from geometry.</b> During rotation, a robot's role comes from the sign of the torque its contact would apply relative to the commanded
+        rotation direction. During translation, it comes from whether its inward push is aligned with the direction to the next waypoint.
+        <b>Push</b> robots drive the object, <b>Support</b> robots follow their slot as a hinge or brace, and <b>Prevent</b> robots track their slot at a
+        <b>capped speed</b>, so they resist the object whenever it moves too fast.
+      </p>
     </div>
-    <h2 class="subtitle has-text-centered">
-      Mission time across terrain type, surface friction coefficient (&mu;) and box mass. Uphill and downhill terrains have a 5&deg; incline.
-      R2P2 achieves <b>successful transport in every case</b>. Mission time grows with box mass on flat and uphill surfaces.
-    </h2>
-  </div>
-</section>
-<!-- End Generalizability -->
 
-<!-- Comparison -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Comparison with Baseline</h2>
-    <div class="columns is-centered">
-      <div class="column">
-        <div class="table-container">
-          <table class="table is-bordered is-narrow is-hoverable results-table">
-            <thead>
-              <tr>
-                <th rowspan="2">Case (bearing)</th>
-                <th colspan="2">Uphill</th>
-                <th colspan="2">Downhill</th>
-                <th colspan="2">Flat</th>
-              </tr>
-              <tr><th>VLF</th><th>R2P2</th><th>VLF</th><th>R2P2</th><th>VLF</th><th>R2P2</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>1 (15&deg;)</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>2 (30&deg;)</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>3 (45&deg;)</td><td>F</td><td>S</td><td>F</td><td>S</td><td>F</td><td>S</td></tr>
-              <tr><td>4 (60&deg;)</td><td>F</td><td>S</td><td>F</td><td>S</td><td>F</td><td>S</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="has-text-centered">(a) VLF baseline vs. R2P2, 20 cm goal tolerance</p>
-      </div>
-      <div class="column">
-        <div class="table-container">
-          <table class="table is-bordered is-narrow is-hoverable results-table">
-            <thead>
-              <tr><th>Case (bearing)</th><th>Uphill</th><th>Downhill</th><th>Flat</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>1 (15&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>2 (30&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>3 (45&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>4 (60&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
-              <tr><td>5 (75&deg;)</td><td>S</td><td>S</td><td>S</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="has-text-centered">(b) R2P2, tighter 10 cm goal tolerance</p>
-      </div>
-    </div>
-    <h2 class="subtitle has-text-centered">
-      Success (S) or failure (F) over different goal bearings and terrains.
-      The <b>Virtual Leader Follower (VLF)</b> baseline only succeeds for small bearings, losing the box or colliding beyond that,
-      while <b>R2P2 succeeds in every case</b>. On flat terrain, six robots with R2P2 can move a box of up to <b>15 kg</b>, versus only 0.05 kg with VLF.
-    </h2>
-  </div>
-</section>
-<!-- End Comparison -->
-
-<!-- Sensitivity Analysis -->
-<section class="section">
-  <div class="container">
-    <h2 class="title is-3 has-text-centered">Sensitivity Analysis</h2>
+    <h3 class="title is-4 has-text-centered">Contact placement for three object shapes</h3>
     <div class="columns is-centered">
       <div class="column has-text-centered">
-        <!-- replace with <img src="static/images/heuristic_effects.png" alt="Main effects of heuristic control parameters"> -->
-        <div class="img-placeholder">Figure 8: Main effects of heuristic control parameters</div>
+        <!-- replace with <img class="paper-figure" src="static/images/rect_slots.png" alt="Rectangle robot distribution"> -->
+        <div class="img-placeholder">Figure 3: Rectangle slots (flat 50&ndash;50, incline 80&ndash;20)</div>
+        <p class="caption">
+          <b>Rectangle.</b> Robots split evenly between the long faces on flat terrain. On an incline, 80% go to the down-slope face
+          (at least two on the up-slope face), and short-face robots brace against sliding.
+        </p>
       </div>
       <div class="column has-text-centered">
-        <!-- replace with <img src="static/images/environment_effects.png" alt="Main effects of environment factors"> -->
-        <div class="img-placeholder">Figure 9: Main effects of environment factors</div>
+        <img class="paper-figure" src="static/images/lshape_slots.png" alt="L-shape contact placement">
+        <p class="caption">
+          <b>L-shape.</b> Slots cover the back face, front arm, front leg and two short edges: a 50&ndash;50 split on flat terrain,
+          and 70&ndash;30 on the incline with one robot on each short edge.
+        </p>
+      </div>
+      <div class="column has-text-centered">
+        <img class="paper-figure" src="static/images/circle_slots.png" alt="Circular object contact placement">
+        <p class="caption">
+          <b>Circle.</b> The diameter perpendicular to the waypoint bearing &beta; splits the ring: the trailing half Pushes and the leading half Prevents.
+          Uphill, nearly all robots Push; downhill, the counts mirror.
+        </p>
       </div>
     </div>
-    <div class="container is-max-desktop">
-      <h2 class="subtitle has-text-centered">
-        Taguchi L9&times;L9 crossed-array study (81 PyBullet runs per terrain) of the effect of R2P2 heuristics and environment factors on task completion time.
-        <b>Contact placement</b> is the dominant heuristic on every terrain, producing a 9&times; performance difference on flat terrain,
-        3.7&times; uphill and 2.2&times; downhill. The best heuristic configuration also differs between terrains.
-      </h2>
+  </div>
+</section>
+<!-- End Method -->
+
+<!-- Scalability -->
+<section class="section" id="scalability">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Generalizability Across Terrains and Scalability</h2>
+    <!-- replace with <img class="paper-figure" src="static/images/team_size.png" alt="Mission time against team size"> -->
+    <div class="img-placeholder is-wide">Figure 7: Mission time against team size for the six shape&ndash;terrain configurations</div>
+    <h2 class="subtitle has-text-centered">
+      Three object shapes &times; flat and 6&deg; terrain &times; eight team sizes (<b>N = 4 to 15</b>) &times; five obstacle layouts:
+      <b>all 240 missions reached the goal</b>. Mission time falls with team size and flattens by N &asymp; 8.
+      Inclined missions (an uphill&ndash;downhill round trip) gain the most, <b>32&ndash;40%</b> from N = 4 to 15, while flat missions gain 15&ndash;26%.
+      Because R2P2 is decentralized, per-robot compute does not depend on N.
+    </h2>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/rect_flat.mp4" class="result-video"></video> -->
+        <div class="video-placeholder">Video: Rectangle, flat terrain</div>
+        <p class="caption">Rectangle, flat</p>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/lshape_flat.mp4" class="result-video"></video> -->
+        <div class="video-placeholder">Video: L-shape, flat terrain</div>
+        <p class="caption">L-shape, flat</p>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/rect_incline.mp4" class="result-video"></video> -->
+        <div class="video-placeholder">Video: Rectangle, 6&deg; incline</div>
+        <p class="caption">Rectangle, 6&deg; incline</p>
+      </div>
+      <div class="column has-text-centered">
+        <video class="result-video" controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/mission_circle_slope_compact_uphill.mp4" poster=""></video>
+        <p class="caption">Circle, 6&deg; incline (uphill)</p>
+      </div>
     </div>
   </div>
 </section>
-<!-- End Sensitivity Analysis -->
+<!-- End Scalability -->
 
-<!-- Physical Experiment -->
-<section class="section">
+<!-- Robot Malfunction -->
+<section class="section" id="malfunction">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Physical Experiment</h2>
-    <!-- replace with <img src="static/images/physical_experiment.png" alt="Physical and simulation experiment with R2P2" style="width: 100%; height: auto;"> -->
-    <div class="img-placeholder is-wide">Figure 10: Physical and simulation experiment with R2P2</div>
+    <h2 class="title is-3 has-text-centered">Robot Malfunction</h2>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <img class="paper-figure" src="static/images/malfunction.png" alt="Route replanned around a stalled robot">
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/malfunction.mp4" class="result-video"></video> -->
+        <div class="video-placeholder is-square">Video: Robot malfunction and replanning</div>
+      </div>
+    </div>
     <h2 class="subtitle has-text-centered">
-      Four <b>TurtleBot3 Burger</b> robots transport a 1.2 kg cardboard box over flat terrain, each running R2P2 <b>onboard</b> (Raspberry Pi 4, ROS2) using motion-capture state.
-      Top: box trajectories in the physical experiment and in simulation. Bottom: snapshots from hardware and from the simulator.
-      With identical heuristics, the trajectories closely match. The hardware mission takes about 25 minutes versus about 3 minutes in simulation.
+      One robot silently stops (its velocity is commanded to zero) in each of <b>180 missions</b>, varying the layout, team size (N = 5 to 12),
+      pushing or preventing face, middle or corner slot, and failure time (15, 45 or 75% of the mission).
+      <b>Every failure was detected</b> (median 0.60 s, worst 0.70 s), and all survivors reached the same verdict on the same tick
+      without exchanging fault messages. No healthy robot was ever flagged. Replanning and redistribution take 3.6 &plusmn; 1.4 s,
+      and <b>179 of 180 missions</b> were delivered.
     </h2>
+    <div class="content has-text-justified">
+      <p>
+        Losing a pushing-side robot costs little, and the cost shrinks as the team grows: the median penalty falls from 22.2 s at N = 5 to 12.4 s at N = 12.
+        Losing a preventing-side robot costs more, because the object must be backed away from the stalled robot and routed around it.
+      </p>
+    </div>
   </div>
 </section>
-<!-- End Physical Experiment -->
+<!-- End Robot Malfunction -->
+
+<!-- Estimation Noise -->
+<section class="section" id="noise">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Robustness to Estimation Noise</h2>
+    <!-- replace with <img class="paper-figure" src="static/images/noise_layouts.png" alt="Estimation-noise layouts L1 and L2"> -->
+    <div class="img-placeholder is-wide">Figure 14: Estimation-noise layouts L1 and L2, each shown through its no-noise mission</div>
+    <h2 class="subtitle has-text-centered">
+      Zero-mean Gaussian noise is added to one channel of the shared state at every control tick (object yaw, object position or robot position),
+      for an eight-robot team in two layouts that force several turns.
+      R2P2 tolerates up to <b>0.010 rad</b> of yaw noise, <b>4 mm</b> of object-position noise and <b>2 cm</b> of robot-position noise
+      while adding at most 8 s to the mission. Past these levels the object still arrives, but the cost grows quickly.
+      Missions stop finishing within 1200 s at 0.050 rad, 2 cm and 5 cm, respectively.
+    </h2>
+    <div class="content has-text-justified">
+      <p>
+        The swept levels range from motion-capture accuracy (sub-millimetre) to the lower end of onboard visual-inertial estimation (centimetres).
+        Noise changes neither the route nor the amount of turning. It lengthens the waypoint rotations, where the object waits while robots converge on their slots.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- End Estimation Noise -->
+
+<!-- Baseline Comparison -->
+<section class="section" id="baseline">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Comparison with State-of-the-Art (KG-HS)</h2>
+    <!-- replace with <img class="paper-figure" src="static/images/kghs_comparison.png" alt="R2P2 vs KG-HS executions"> -->
+    <div class="img-placeholder is-wide">Figure 9: Cluttered-scene executions with four robots, R2P2 (left) vs. KG-HS (right)</div>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/r2p2_cluttered.mp4" class="result-video"></video> -->
+        <div class="video-placeholder">Video: R2P2, cluttered scene</div>
+        <p class="caption">R2P2</p>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/kghs_cluttered.mp4" class="result-video"></video> -->
+        <div class="video-placeholder">Video: KG-HS, cluttered scene</div>
+        <p class="caption">KG-HS</p>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      R2P2 is compared with <b>KG-HS</b>, a keyframe-guided hybrid-search planner with MPC. The task is a 6 kg rectangle in a cluttered flat scene,
+      run with and without estimation noise.
+      With four robots, KG-HS finishes slightly sooner overall (R2P2 takes 1.06&ndash;1.09&times; as long).
+      With eight robots, KG-HS needs about <b>562 s to plan</b>, against <b>0.04 s</b> for R2P2, so R2P2's total time is <b>0.42&times;</b> that of the baseline.
+    </h2>
+    <div class="content has-text-justified">
+      <p>
+        R2P2 is also far more consistent: its execution time was identical in every run of every condition,
+        while KG-HS execution times varied with a standard deviation of 87&ndash;342 s.
+        R2P2 delivered the object in all 40 of its runs and KG-HS in all 30 of its runs. KG-HS does not model terrain inclination, so the comparison is limited to flat terrain.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- End Baseline Comparison -->
+
+<!-- Ablations -->
+<section class="section" id="ablations">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Ablation Studies</h2>
+
+    <h3 class="title is-4">Transport-aware object planning</h3>
+    <!-- replace with <img class="paper-figure" src="static/images/planner_routes.png" alt="Routes of Grid A*, Lattice A* and TA-A*"> -->
+    <div class="img-placeholder is-wide">Figure 15: Routes of Grid A*, Lattice A* and TA-A* in dense environments</div>
+    <div class="content has-text-justified">
+      <p>
+        Transport-aware A* (TA-A*) uses <b>measured rotate&ndash;translate times</b> as edge costs instead of path length.
+        It shortens the mean mission by <b>4.5%</b> in the shared layouts and <b>9.0%</b> in the denser ones, and by up to <b>27.6%</b> when it replaces a six-leg route with two legs.
+        Lattice A* stays within 3% of Grid A*, so the gain comes from the cost model, not from the lattice. The gain holds at 8 and 12 robots (12.6&ndash;17.6%), and all 42 missions reached the goal.
+      </p>
+    </div>
+
+    <h3 class="title is-4">Speed regulation by the Prevent role</h3>
+    <div class="content has-text-justified">
+      <p>
+        A 25 N push along the direction of travel, larger than ground friction, accelerates the object to <b>0.84 m/s</b> when the Prevent cap is removed,
+        about three times its undisturbed speed. With any cap, the disturbed peak stays between <b>0.15 and 0.24 m/s</b>.
+        The cost is time: 51&ndash;101 s for the 8 m leg with a cap, against 33&ndash;37 s without one. The Prevent role matters when the application bounds the object's speed.
+      </p>
+    </div>
+
+    <h3 class="title is-4">Robot split on inclined terrain</h3>
+    <div class="content has-text-justified">
+      <p>
+        The proposed 80&ndash;20 split (most robots on the down-slope face) is compared with 50&ndash;50, 60&ndash;40 and 70&ndash;30 splits for N = 8, 10 and 12 on the 6&deg; incline.
+        It gives the <b>smallest back-slide</b> at every team size and friction level, at most 0.07 m against 0.14&ndash;0.20 m for an even split,
+        and the fastest uphill mission in five of six cases. All 54 runs reached the goal.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- End Ablations -->
+
+<!-- Physical Experiments -->
+<section class="section" id="hardware">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Physical Experiments</h2>
+    <div class="content has-text-justified">
+      <p>
+        <b>Four TurtleBot3 Burger</b> robots run R2P2 <b>on board</b> (ROS 2 on a Raspberry Pi 5, at 50 Hz), using poses from a Vicon motion-capture system.
+        The objects are a 1.00 &times; 0.25 m, 1.8 kg rectangle and a 1.5 kg circle of radius 0.33 m.
+        R2P2 was tested <b>without retuning</b> across two object shapes, two terrains and three environment types,
+        including uphill, downhill and cross-slope transport. <b>All missions reached the goal.</b>
+      </p>
+      <ul>
+        <li><b>Flat, no obstacles:</b> rectangle and circle</li>
+        <li><b>Flat, cluttered:</b> rectangle</li>
+        <li><b>Flat, narrow doorway:</b> rectangle</li>
+        <li><b>6&deg; incline, no obstacles:</b> rectangle and circle</li>
+        <li><b>6&deg; incline, obstacles:</b> rectangle and circle</li>
+      </ul>
+    </div>
+
+    <h3 class="title is-4">Flat terrain</h3>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_flat_rect.png" alt="Flat waypoint mission, rectangle"> -->
+        <div class="img-placeholder">Figure 17a: Flat waypoint mission, rectangle</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_flat_circle.png" alt="Flat waypoint mission, circle"> -->
+        <div class="img-placeholder">Figure 17b: Flat waypoint mission, circle</div>
+      </div>
+    </div>
+    <p class="caption has-text-centered">
+      <b>No obstacles:</b> the object tracks a reference path through waypoints. The rectangle took 1918 s and the circle 1932 s.
+    </p>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_cluttered.png" alt="Cluttered mission on hardware"> -->
+        <div class="img-placeholder">Cluttered hardware mission (Figure 1)</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/hw_cluttered.mp4" class="result-video"></video> -->
+        <div class="video-placeholder is-square">Video: Cluttered hardware mission</div>
+      </div>
+    </div>
+    <p class="caption has-text-centered">
+      <b>Cluttered:</b> the object-level planner routes around the obstacles, and the object reached the goal in 1722 s without any collision.
+    </p>
+
+    <!-- replace with <img class="paper-figure" src="static/images/doorway.png" alt="Doorway transport in PyBullet and hardware"> -->
+    <div class="img-placeholder is-wide">Figure 11: Doorway transport in PyBullet (top) and hardware (bottom)</div>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_doorway_snapshots.png" alt="Lengthwise doorway transport snapshots"> -->
+        <div class="img-placeholder">Figure 10a: Lengthwise doorway transport, snapshots t1&ndash;t4</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <video controls autoplay loop muted playsinline src="static/videos/hw_doorway.mp4" class="result-video"></video> -->
+        <div class="video-placeholder is-square">Video: Narrow doorway mission</div>
+      </div>
+    </div>
+    <p class="caption has-text-centered">
+      <b>Narrow doorway:</b> the doorway is narrower than the object's long side. The object is pushed broadside, switches to <b>lengthwise</b> transport
+      to pass through, then switches back. The simulated and physical runs follow the same three-leg route and mode sequence
+      (431 s in simulation vs. 1508 s on hardware, a gap mainly due to wheel slip and actuation noise).
+    </p>
+
+    <h3 class="title is-4">6&deg; inclined terrain</h3>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_ramp_rect.png" alt="Rectangle ramp waypoint mission"> -->
+        <div class="img-placeholder">Figure 18a: Rectangle ramp waypoint mission</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_uphill_snapshots.png" alt="Uphill transport snapshots"> -->
+        <div class="img-placeholder">Figure 10b: Uphill transport, snapshots t1&ndash;t4</div>
+      </div>
+    </div>
+    <p class="caption has-text-centered">
+      <b>No obstacles:</b> the object goes downhill to the first waypoint, uphill to the second, and across the slope back to the goal.
+      The rectangle took 1983 s and the circle 1339 s.
+    </p>
+
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <video class="result-video" controls="" autoplay="" loop="" muted="" playsinline="" src="static/videos/phys_rect_slope_astar_annotated_v4.mp4" poster=""></video>
+        <p class="caption">Rectangle on the 6&deg; incline around obstacles, with the A* route</p>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_ramp_rect_obstacles.png" alt="Rectangle downhill around obstacles"> -->
+        <div class="img-placeholder">Figure 18b: Rectangle, downhill around obstacles</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_ramp_circle_obstacle.png" alt="Circle around a triangular obstacle"> -->
+        <div class="img-placeholder">Figure 19b / 10c: Circle around obstacles on the incline</div>
+      </div>
+    </div>
+    <p class="caption has-text-centered">
+      <b>Obstacles:</b> the planned routes include both uphill and downhill segments. The rectangle reached the goal in 2105 s and the circle in 2337 s.
+    </p>
+  </div>
+</section>
+<!-- End Physical Experiments -->
+
+<!-- Appendix -->
+<section class="section" id="appendix">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Additional Results</h2>
+
+    <h3 class="title is-4">Obstacle layouts</h3>
+    <!-- replace with <img class="paper-figure" src="static/images/layouts.png" alt="Five shared obstacle layouts"> -->
+    <div class="img-placeholder is-wide">Figure 12: Five shared obstacle layouts on flat terrain (top) and the 6&deg; incline (bottom)</div>
+    <!-- replace with <img class="paper-figure" src="static/images/malfunction_layouts.png" alt="Robot-malfunction environments"> -->
+    <div class="img-placeholder is-wide">Figure 13: Robot-malfunction environments (seeds 1&ndash;3)</div>
+    <p class="caption has-text-centered">
+      Obstacle positions are shared across all three object shapes and both terrains, so no layout favors one shape over another.
+    </p>
+
+    <h3 class="title is-4">Operating conditions on inclined terrain</h3>
+    <div class="content has-text-justified">
+      <p>
+        Starting from a nominal 6&deg; incline with friction &mu;<sub>g</sub> = 0.11 (low enough that the object slides when left alone) and N = 8,
+        one parameter at a time is varied: object mass, ground friction (0.06&ndash;0.15), slope (3&deg;&ndash;9&deg;) and team size (4&ndash;15).
+        The nominal round trip takes 450 &plusmn; 64 s for the 10 kg rectangle and 573 &plusmn; 34 s for the 5 kg circle.
+        Every condition succeeded in all five layouts except the 20 kg rectangle, which succeeded in four of five.
+      </p>
+    </div>
+
+    <h3 class="title is-4">Incline split for the circular object</h3>
+    <div class="content has-text-justified">
+      <p>
+        Repeating the split ablation for the circle, the proposed split (two up-slope robots, or three once N &ge; 12) gives the smallest back-slide
+        and roughly <b>half the uphill time</b> of an even split. Downhill, it holds the object to the lowest peak speed (0.09 m/s against 0.14 m/s).
+        All 63 runs reached the goal.
+      </p>
+    </div>
+
+    <h3 class="title is-4">Aborted robot-malfunction mission</h3>
+    <!-- replace with <img class="paper-figure" src="static/images/aborted_mission.png" alt="Aborted malfunction mission"> -->
+    <div class="img-placeholder is-wide">Figure 16: The aborted N = 8, seed-1 malfunction mission</div>
+    <p class="caption has-text-centered">
+      The single failed recovery: the preventing-face robot stalled 0.07 m from the object, so once it was inflated as an obstacle,
+      the object's own pose fell inside the keep-out zone and no route existed. Backing the object out by 0.58 m would have restored a route.
+    </p>
+
+    <h3 class="title is-4">Additional physical experiments</h3>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_mixed_ramp.png" alt="Mixed uphill/downhill ramp mission"> -->
+        <div class="img-placeholder">Figure 18c: Rectangle, mixed uphill/downhill ramp mission</div>
+      </div>
+      <div class="column has-text-centered">
+        <!-- replace with <img class="paper-figure" src="static/images/hw_ramp_circle.png" alt="Circle on unobstructed ramp"> -->
+        <div class="img-placeholder">Figure 19a: Circle, unobstructed ramp</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Appendix -->
 
 
 <footer class="footer">
