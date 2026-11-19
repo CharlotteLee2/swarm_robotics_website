@@ -160,16 +160,104 @@ body {
   aspect-ratio: 16 / 9;
 }
 
-.results-table {
-  margin: 0 auto;
+.img-placeholder.is-square {
+  max-width: 100%;
 }
 
-.results-table th,
-.results-table td {
-  text-align: center !important;
-  vertical-align: middle !important;
+/* Video placeholders: swap each for a <video class="result-video"> once ready */
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 1rem auto;
+  background: #e8ecf2;
+  border: 2px dashed #9aa7b8;
+  border-radius: 10px;
+  color: #5b6878;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.05rem;
+  text-align: center;
+  padding: 1rem;
 }
 
-.table-container {
+.video-placeholder::before {
+  content: "\25B6";
+  margin-right: 0.5rem;
+}
+
+.video-placeholder.is-square {
+  aspect-ratio: 1 / 1;
+  max-width: 480px;
+}
+
+.result-video {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+}
+
+.caption {
+  font-size: 0.95rem;
+  color: #4a4a4a;
   margin-bottom: 1.5rem;
+}
+
+.section h3.title {
+  margin-top: 2rem;
+}
+
+/* Sticky section navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 3.75rem;
+}
+
+.site-nav {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  font-family: 'Google Sans', sans-serif;
+}
+
+.site-nav .navbar-menu {
+  justify-content: center;
+}
+
+.site-nav .navbar-start {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-nav .nav-brand {
+  font-weight: bold;
+}
+
+.site-nav .nav-link {
+  color: #4a4a4a;
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav .nav-link:hover {
+  color: #3273dc;
+  background: transparent;
+}
+
+.site-nav .nav-link.is-active {
+  color: #3273dc;
+  border-bottom-color: #3273dc;
+  background: transparent;
+}
+
+/* Paper figures (PNGs rendered from the PDF figures by scripts/pdf_to_png.sh) */
+.paper-figure {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  border-radius: 6px;
 }
